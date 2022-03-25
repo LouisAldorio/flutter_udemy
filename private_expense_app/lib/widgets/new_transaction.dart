@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -57,65 +60,82 @@ class _NewTransactionState extends State<NewTransaction> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 5,
-      child: Container(
-        padding: EdgeInsets.all(10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            TextField(
-              decoration: InputDecoration(
-                labelText: "Title",
+    return SingleChildScrollView(
+      child: Card(
+        elevation: 5,
+        child: Container(
+          padding: EdgeInsets.only(
+            top: 10,
+            left: 10,
+            right: 10,
+            // handling keyboard open
+            bottom: MediaQuery.of(context).viewInsets.bottom + 10,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              TextField(
+                decoration: InputDecoration(
+                  labelText: "Title",
+                ),
+                onSubmitted: (_) => submitData(),
+                // onChanged: (value) {
+                //   titleInput = value;
+                // },
+                controller: titleController,
               ),
-              onSubmitted: (_) => submitData(),
-              // onChanged: (value) {
-              //   titleInput = value;
-              // },
-              controller: titleController,
-            ),
-            TextField(
-              style: TextStyle(
-                fontFamily: "Quicksand",
+              TextField(
+                style: TextStyle(
+                  fontFamily: "Quicksand",
+                ),
+                decoration: InputDecoration(
+                  labelText: "Amount",
+                ),
+                keyboardType: TextInputType.numberWithOptions(decimal: true),
+                // onChanged: (value) {
+                //   amountInput = value;
+                // },
+                controller: amountController,
+                onSubmitted: (_) => submitData(),
               ),
-              decoration: InputDecoration(
-                labelText: "Amount",
-              ),
-              keyboardType: TextInputType.numberWithOptions(decimal: true),
-              // onChanged: (value) {
-              //   amountInput = value;
-              // },
-              controller: amountController,
-              onSubmitted: (_) => submitData(),
-            ),
-            SizedBox(
-              height: 70,
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Text(_selectedDate == null
-                        ? "No Date Chosen"
-                        : "Picked Date : ${DateFormat.yMd().format(_selectedDate!)}"),
-                  ),
-                  TextButton(
-                    onPressed: _presentDatePicker,
-                    child: Text(
-                      "Choose Date",
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.primary,
-                          fontWeight: FontWeight.bold),
+              SizedBox(
+                height: 70,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(_selectedDate == null
+                          ? "No Date Chosen"
+                          : "Picked Date : ${DateFormat.yMd().format(_selectedDate!)}"),
                     ),
-                  )
-                ],
+                    Platform.isIOS
+                        ? CupertinoButton(
+                            child: Text(
+                              "Choose Date",
+                              style: TextStyle(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            onPressed: _presentDatePicker)
+                        : TextButton(
+                            onPressed: _presentDatePicker,
+                            child: Text(
+                              "Choose Date",
+                              style: TextStyle(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          )
+                  ],
+                ),
               ),
-            ),
-            ElevatedButton(
-              onPressed: submitData,
-              child: Text(
-                "Add Transaction",
-              ),
-            )
-          ],
+              ElevatedButton(
+                onPressed: submitData,
+                child: Text(
+                  "Add Transaction",
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
