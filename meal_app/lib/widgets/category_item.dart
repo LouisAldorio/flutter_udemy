@@ -7,7 +7,7 @@ class CategoryItem extends StatelessWidget {
   final String title;
   final Color color;
 
-  CategoryItem(this.id, this.title, this.color);
+  const CategoryItem(this.id, this.title, this.color);
 
   void selectCategory(BuildContext ctx) {
     Navigator.of(ctx).pushNamed(
@@ -23,7 +23,7 @@ class CategoryItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () => selectCategory(context),
-      splashColor: Theme.of(context).primaryColor,
+      splashColor: Theme.of(context).colorScheme.primary,
       borderRadius: BorderRadius.circular(15),
       child: Container(
         padding: const EdgeInsets.all(15),
